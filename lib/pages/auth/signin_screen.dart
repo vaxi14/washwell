@@ -52,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 
                 const SizedBox(height: 40),
                 
-                // Login Method Toggle
+                //Toggle method
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
@@ -116,7 +116,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 
                 const SizedBox(height: 24),
                 
-                // Email/Phone Field
+                //Email/Phone Field
                 if (useEmail)
                   TextFormField(
                     controller: emailController,

@@ -64,8 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 
                 const SizedBox(height: 40),
-                
-                // Full Name Field
+
                 TextFormField(
                   controller: fullNameController,
                   decoration: const InputDecoration(
@@ -77,8 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 
                 const SizedBox(height: 16),
-                
-                // Email Field
+
                 TextFormField(
                   controller: emailController,
                   decoration: const InputDecoration(
@@ -91,8 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 
                 const SizedBox(height: 16),
-                
-                // Phone Field
+
                 TextFormField(
                   controller: phoneController,
                   decoration: const InputDecoration(
@@ -105,8 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 
                 const SizedBox(height: 16),
-                
-                // Password Field
+
                 TextFormField(
                   controller: passwordController,
                   obscureText: _obscurePassword,
