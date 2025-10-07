@@ -1,0 +1,4 @@
+class AppConstants{
+  static const String supabaseurl = "https://virdwjlmftmltkfpwogq.supabase.co";
+  static const String supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpcmR3amxtZnRtbHRrZnB3b2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4MzYyMTcsImV4cCI6MjA3NTQxMjIxN30.sPJ3ZaPCqvxK7SqqmhJn0SW5LXcOMsP5PEvangejpvE";
+}
