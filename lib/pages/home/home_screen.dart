@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controllers/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  // Initialize the controller
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +17,22 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section
+              // Header Section with reactive data
               _buildHeader(),
               
               const SizedBox(height: 20),
               
-              // Track Order Section
+              // Track Order Section with dynamic text
               _buildTrackOrderSection(),
               
               const SizedBox(height: 25),
               
-              // Services Section
+              // Services Section with controller data
               _buildServicesSection(),
               
               const SizedBox(height: 25),
               
-              // Quick Stats Section
+              // Quick Stats Section with reactive stats
               _buildQuickStatsSection(),
               
               const SizedBox(height: 40),
@@ -36,11 +40,11 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      
-      // Floating Promo Button (will appear on scroll)
+
+      // Floating Promo Button connected to controller
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Will implement promo bottom sheet later
+          controller.showPromotion();
         },
         backgroundColor: Colors.orange,
         icon: const Icon(Icons.local_offer, color: Colors.white),
@@ -56,7 +60,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Header with Welcome and Notification
+  // Header with reactive greeting and notifications
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -66,13 +70,14 @@ class HomeScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Hello! 👋',
+              // Reactive greeting from controller
+              Obx(() => Text(
+                controller.greeting.value,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],
                 ),
-              ),
+              )),
               const SizedBox(height: 4),
               const Text(
                 'Welcome to LaundryLens',
@@ -84,34 +89,35 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          IconButton(
+          // Reactive notification badge
+          Obx(() => IconButton(
             onPressed: () {
-              // Will implement notifications later
+              controller.onNotificationTap();
             },
             icon: Badge(
-              // Will make dynamic later
-              label: const Text('3'),
+              label: Text(controller.notificationCount.value.toString()),
+              isLabelVisible: controller.notificationCount.value > 0,
               child: const Icon(
                 Icons.notifications_none,
                 size: 28,
                 color: Colors.blue,
               ),
             ),
-          ),
+          )),
         ],
       ),
     );
   }
 
-  // Track Order Section
+  // Track Order Section with dynamic content
   Widget _buildTrackOrderSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
         onTap: () {
-          // Get.toNamed('/track-order');
+          controller.navigateToTrackOrder();
         },
-        child: Container(
+        child: Obx(() => Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -130,8 +136,10 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(
-                Icons.track_changes,
+              Icon(
+                controller.hasActiveOrders.value 
+                    ? Icons.track_changes 
+                    : Icons.add_circle_outline,
                 size: 40,
                 color: Colors.white,
               ),
@@ -140,22 +148,36 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Track Your Order',
-                      style: TextStyle(
+                    // Dynamic title based on order status
+                    Text(
+                      controller.trackOrderText,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 4),
+                    // Dynamic subtitle based on order status
                     Text(
-                      'Real-time updates on your laundry',
+                      controller.trackOrderSubtitle,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withOpacity(0.9),
                       ),
                     ),
+                    // Show order status if active orders exist
+                    if (controller.hasActiveOrders.value) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        controller.activeOrderStatus.value,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.8),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -166,12 +188,12 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        )),
       ),
     );
   }
 
-  // Services Section
+  // Services Section using controller data
   Widget _buildServicesSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -187,30 +209,50 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          GridView.count(
+          // Reactive services grid from controller
+          Obx(() => GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.2,
-            children: [
-              _buildServiceCard('Wash', Icons.local_laundry_service, Colors.blue),
-              _buildServiceCard('Iron', Icons.iron, Colors.green),
-              _buildServiceCard('Dry', Icons.ac_unit, Colors.orange),
-              _buildServiceCard('Clean', Icons.cleaning_services, Colors.purple),
-            ],
-          ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.2,
+            ),
+            itemCount: controller.services.length,
+            itemBuilder: (context, index) {
+              final service = controller.services[index];
+              return _buildServiceCard(service);
+            },
+          )),
         ],
       ),
     );
   }
 
-  // Individual Service Card
-  Widget _buildServiceCard(String title, IconData icon, Color color) {
+  // Individual Service Card using Service model
+  Widget _buildServiceCard(Service service) {
+    // Map service names to colors and icons
+    final colorMap = {
+      'Wash': Colors.blue,
+      'Iron': Colors.green,
+      'Dry': Colors.orange,
+      'Clean': Colors.purple,
+    };
+    
+    final iconMap = {
+      'Wash': Icons.local_laundry_service,
+      'Iron': Icons.iron,
+      'Dry': Icons.ac_unit,
+      'Clean': Icons.cleaning_services,
+    };
+
+    final color = colorMap[service.name] ?? Colors.blue;
+    final icon = iconMap[service.name] ?? Icons.help_outline;
+
     return GestureDetector(
       onTap: () {
-        Get.toNamed('/$title'.toLowerCase());
+        controller.navigateToService(service.name);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -241,8 +283,8 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              title,
-              style: TextStyle(
+              service.name,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
@@ -250,7 +292,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'From ₹50',
+              'From ₹${service.startingPrice.toInt()}',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[600],
@@ -262,7 +304,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Quick Stats Section
+  // Quick Stats Section with reactive data
   Widget _buildQuickStatsSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -291,14 +333,15 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
+            // Reactive stats from controller
+            Obx(() => Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem('Orders', '5', Icons.shopping_bag),
-                _buildStatItem('Hours Saved', '12', Icons.access_time),
-                _buildStatItem('Items Cleaned', '45', Icons.check_circle),
+                _buildStatItem('Orders', controller.totalOrders.value.toString(), Icons.shopping_bag),
+                _buildStatItem('Hours Saved', controller.hoursSaved.value.toString(), Icons.access_time),
+                _buildStatItem('Items Cleaned', controller.itemsCleaned.value.toString(), Icons.check_circle),
               ],
-            ),
+            )),
           ],
         ),
       ),
