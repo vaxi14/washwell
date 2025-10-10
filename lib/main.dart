@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:washwell/pages/home/home_screen.dart';
+import 'package:washwell/pages/main/main_navigation_screen.dart';
 import 'utils/supabase_client.dart';
 import 'controllers/auth_controller.dart';
 import 'pages/auth/signin_screen.dart';
@@ -24,10 +25,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home:  HomeScreen(),
+      home:  MainNavigationScreen(),
       getPages: [
         GetPage(name: '/signin', page: () => SignInScreen()),
         GetPage(name: '/signup', page: () => SignUpScreen()),
+        GetPage(name: '/main', page: ()=> MainNavigationScreen()),
         GetPage(name: '/home', page: () => HomeScreen()),
       ],
       debugShowCheckedModeBanner: false,
