@@ -9,10 +9,10 @@ class MainNavigationScreen extends StatelessWidget {
   final MainNavigationController controller = Get.put(MainNavigationController());
 
   final List<Widget> _screens = [
-    HomeScreen(),           // Index 0
-    Container(),            // Index 1 - Create Order (placeholder)
-    Container(),            // Index 2 - Orders (placeholder)  
-    Container(),            // Index 3 - Profile (placeholder)
+    HomeScreen(),           
+    Container(),            
+    Container(),             
+    Container(),            
   ];
 
   @override
