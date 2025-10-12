@@ -5,7 +5,6 @@ import '../../controllers/home_controller.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  // Initialize the controller
   final HomeController controller = Get.put(HomeController());
 
   @override
@@ -17,22 +16,18 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section with reactive data
               _buildHeader(),
               
               const SizedBox(height: 20),
-              
-              // Track Order Section with dynamic text
+
               _buildTrackOrderSection(),
               
               const SizedBox(height: 25),
               
-              // Services Section with controller data
               _buildServicesSection(),
               
               const SizedBox(height: 25),
               
-              // Quick Stats Section with reactive stats
               _buildQuickStatsSection(),
               
               const SizedBox(height: 40),
@@ -41,7 +36,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      // Floating Promo Button connected to controller
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           controller.showPromotion();
@@ -60,7 +54,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Header with reactive greeting and notifications
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -80,7 +73,7 @@ class HomeScreen extends StatelessWidget {
               )),
               const SizedBox(height: 4),
               const Text(
-                'Welcome to LaundryLens',
+                'Welcome to WashWell',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

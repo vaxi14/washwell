@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:washwell/pages/home/home_screen.dart';
 import 'package:washwell/pages/main/main_navigation_screen.dart';
+import 'package:washwell/pages/service/clean_service_screen.dart';
+import 'package:washwell/pages/service/dry_service_screen.dart';
+import 'package:washwell/pages/service/iron_service_screen.dart';
+import 'package:washwell/pages/service/wash_service_screen.dart';
 import 'utils/supabase_client.dart';
 import 'controllers/auth_controller.dart';
 import 'pages/auth/signin_screen.dart';
@@ -31,6 +35,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/signup', page: () => SignUpScreen()),
         GetPage(name: '/main', page: ()=> MainNavigationScreen()),
         GetPage(name: '/home', page: () => HomeScreen()),
+        GetPage(name: '/wash', page: () => WashServiceScreen()),
+        GetPage(name: '/iron', page: () => IronServiceScreen()),
+        GetPage(name: '/dry', page: ()=> DryServiceScreen()),
+        GetPage(name: '/clean', page: ()=> CleanServiceScreen())
       ],
       debugShowCheckedModeBanner: false,
     );

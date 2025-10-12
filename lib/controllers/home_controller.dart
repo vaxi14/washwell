@@ -18,54 +18,43 @@ class Service {
 }
 
 class HomeController extends GetxController {
-  // ==================== OBSERVABLE VARIABLES ====================
   
-  // User greeting based on time of day
   var greeting = 'Hello!'.obs;
-  
-  // Notification count - will update badge
+
   var notificationCount = 0.obs;
   
-  // Track if user has active orders
   var hasActiveOrders = false.obs;
   
-  // Current active order status for display
   var activeOrderStatus = 'No active orders'.obs;
   
-  // Loading state for any async operations
+
   var isLoading = false.obs;
 
-  // ==================== LISTS & DATA ====================
-  // List of services we offer - will be displayed in grid
-  // FIXED: Use RxList instead of .obs on regular List
   var services = <Service>[].obs;
 
-  // Quick stats data - will be calculated based on user activity
   var totalOrders = 0.obs;
   var hoursSaved = 0.obs;
   var itemsCleaned = 0.obs;
 
-  // ==================== INITIALIZATION ====================
   @override
   void onInit() {
     super.onInit();
-    initializeHomeData(); // FIXED: Removed underscore to make it public
+    initializeHomeData();
   }
 
-  // ==================== CORE METHODS ====================
 
-  /// Initialize all home screen data when app starts
-  void initializeHomeData() { // FIXED: Made public by removing underscore
+  ///Initialize all home screen data when app starts
+  void initializeHomeData() {
     _setTimeBasedGreeting();
     _loadNotificationCount();
     _checkActiveOrders();
     _calculateQuickStats();
-    _initializeServices(); // ADDED: Initialize services list
+    _initializeServices();
   }
 
   /// Initialize services list
   void _initializeServices() {
-    services.assignAll([ // FIXED: Use assignAll to update RxList
+    services.assignAll([
       Service(
         name: 'Wash',
         icon: '🔄',
@@ -93,7 +82,6 @@ class HomeController extends GetxController {
     ]);
   }
 
-  /// Set greeting based on current time (Morning, Afternoon, Evening)
   void _setTimeBasedGreeting() {
     final hour = DateTime.now().hour;
     
@@ -106,12 +94,11 @@ class HomeController extends GetxController {
     }
   }
 
-  /// Load notification count from backend (mock for now)
+
   void _loadNotificationCount() {
-    notificationCount.value = 3; // Mock data
+    notificationCount.value = 3; //static for now
   }
 
-  //checking if user has any active orders
   void _checkActiveOrders() {
     final hasOrders = true; 
     hasActiveOrders.value = hasOrders;
@@ -123,14 +110,14 @@ class HomeController extends GetxController {
     }
   }
 
-  //based on user's order history
   void _calculateQuickStats() {
     totalOrders.value = 5;
     hoursSaved.value = 12;
     itemsCleaned.value = 45;
   }
 
-  //Navigate to track order screen
+
+  /// Navigate to track order screen
   void navigateToTrackOrder() {
     if (hasActiveOrders.value) {
       Get.toNamed('/track-order');
@@ -143,19 +130,39 @@ class HomeController extends GetxController {
     }
   }
 
-  //Navigate to specific service screen
   void navigateToService(String serviceName) {
-    final service = services.firstWhere(
-      (s) => s.name.toLowerCase() == serviceName.toLowerCase(),
-      orElse: () => Service(name: '', icon: '', route: '', startingPrice: 0),
-    );
-    
-    if (service.route.isNotEmpty) {
+    try {
+      final service = services.firstWhere(
+        (s) => s.name.toLowerCase() == serviceName.toLowerCase(),
+      );
+      
+      print('🎯 Navigating to: ${service.route}'); 
+      
       Get.toNamed(service.route);
+      
+    } catch (e) {
+      print('❌ Error navigating to service: $e');
+      Get.snackbar(
+        'Service Not Available',
+        'The $serviceName service is currently unavailable',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
-  //Handle notification icon tap
+  void navigateToServiceByRoute(String routeName) {
+    try {
+      Get.toNamed(routeName);
+    } catch (e) {
+      print('❌ Error navigating to route: $routeName - $e');
+      Get.snackbar(
+        'Navigation Error',
+        'Unable to open the requested page',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   void onNotificationTap() {
     Get.snackbar(
       'Notifications',
@@ -163,11 +170,10 @@ class HomeController extends GetxController {
       snackPosition: SnackPosition.TOP,
     );
     
-    // Clear notifications (mock)
     notificationCount.value = 0;
   }
 
-  //promotion bottom sheet
+  /// Promotion bottom sheet
   void showPromotion() {
     final discount = totalOrders.value >= 1 ? '10%' : '25%';
     final message = totalOrders.value >= 1 
@@ -239,18 +245,36 @@ class HomeController extends GetxController {
     );
   }
 
+
+  /// Refresh all home screen data
   Future<void> refreshHomeData() async {
     isLoading.value = true;
     await Future.delayed(const Duration(seconds: 2));
     initializeHomeData();
-    
     isLoading.value = false;
   }
-  String get userDisplayName => 'Welcome to WashWell';
+
+  String get userDisplayName => 'Welcome to LaundryLens';
+
   String get trackOrderText => hasActiveOrders.value 
       ? 'Track Your Order' 
       : 'Schedule Your First Order';
+
   String get trackOrderSubtitle => hasActiveOrders.value
       ? 'Real-time updates on your laundry'
       : 'Get started with our laundry services';
+
+  Service? getServiceByName(String name) {
+    try {
+      return services.firstWhere(
+        (s) => s.name.toLowerCase() == name.toLowerCase(),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  bool isServiceRouteAvailable(String routeName) {
+    return services.any((service) => service.route == routeName);
+  }
 }
