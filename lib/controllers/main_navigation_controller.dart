@@ -3,12 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class MainNavigationController extends GetxController {
-  
-
   var currentIndex = 0.obs;
-  
   var ordersBadgeCount = 0.obs;
-  
   var canPop = false.obs;
 
   final List<String> tabRoutes = [
@@ -38,17 +34,23 @@ class MainNavigationController extends GetxController {
     _initializeNavigation();
   }
 
-
-
   void _initializeNavigation() {
     _loadOrdersBadgeCount();
   }
 
+  // FIXED: Updated changeTab method for proper navigation
   void changeTab(int index) {
     if (index >= 0 && index < tabRoutes.length) {
       currentIndex.value = index;
       
-      // Get.offNamedUntil(tabRoutes[index], (route) => route.isFirst);
+      // For Create Order tab, navigate to the create-order screen
+      if (index == 1) { // Create Order tab index
+        Get.offNamedUntil('/create-order', (route) => route.isFirst);
+      } 
+      // For other tabs, use the existing navigation
+      else {
+        Get.offNamedUntil(tabRoutes[index], (route) => route.isFirst);
+      }
     }
   }
 
@@ -66,7 +68,6 @@ class MainNavigationController extends GetxController {
   }
 
   void _loadOrdersBadgeCount() {
-    // TODO: Replace with actual API call to get pending orders count
     ordersBadgeCount.value = 3;
   }
 
@@ -80,7 +81,6 @@ class MainNavigationController extends GetxController {
 
   bool get hasOrdersBadge => ordersBadgeCount.value > 0;
 
-
   void handleBackButton() {
     if (canPop.value) {
       Get.back();
@@ -89,29 +89,45 @@ class MainNavigationController extends GetxController {
     }
   }
 
-
   Future<void> refreshAllTabs() async {
-    // Refresh orders badge
     _loadOrdersBadgeCount();
-
   }
 
+  // FIXED: Updated navigateToCreateOrder method
   void navigateToCreateOrder({String? serviceType}) {
-    changeTab(1); 
+    // Set the current index to Create Order tab
+    currentIndex.value = 1;
+    
+    // Navigate to create-order screen with optional service type
     if (serviceType != null) {
-      Get.toNamed('/create-order', arguments: {'serviceType': serviceType});
+      Get.offNamedUntil('/create-order', (route) => route.isFirst, arguments: {'serviceType': serviceType});
+    } else {
+      Get.offNamedUntil('/create-order', (route) => route.isFirst);
     }
   }
 
   void navigateToOrders({String? filter}) {
-    changeTab(2);
+    currentIndex.value = 2;
     clearOrdersBadge(); 
     
     if (filter != null) {
-      Get.toNamed('/orders', arguments: {'filter': filter});
+      Get.offNamedUntil('/orders', (route) => route.isFirst, arguments: {'filter': filter});
+    } else {
+      Get.offNamedUntil('/orders', (route) => route.isFirst);
     }
   }
 
+  // NEW: Method to navigate back to home tab
+  void navigateToHome() {
+    currentIndex.value = 0;
+    Get.offNamedUntil('/home', (route) => route.isFirst);
+  }
+
+  // NEW: Method to navigate to profile tab
+  void navigateToProfile() {
+    currentIndex.value = 3;
+    Get.offNamedUntil('/profile', (route) => route.isFirst);
+  }
 
   @override
   void onClose() {

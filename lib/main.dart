@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:washwell/pages/home/home_screen.dart';
 import 'package:washwell/pages/main/main_navigation_screen.dart';
+import 'package:washwell/pages/order/create_order_screen.dart';
 import 'package:washwell/pages/service/clean_service_screen.dart';
 import 'package:washwell/pages/service/dry_service_screen.dart';
 import 'package:washwell/pages/service/iron_service_screen.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home:  MainNavigationScreen(),
+      home:  SignInScreen(),
       getPages: [
         GetPage(name: '/signin', page: () => SignInScreen()),
         GetPage(name: '/signup', page: () => SignUpScreen()),
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/wash', page: () => WashServiceScreen()),
         GetPage(name: '/iron', page: () => IronServiceScreen()),
         GetPage(name: '/dry', page: ()=> DryServiceScreen()),
-        GetPage(name: '/clean', page: ()=> CleanServiceScreen())
+        GetPage(name: '/clean', page: ()=> CleanServiceScreen()),
+        GetPage(name: '/create-order', page: ()=> CreateOrderScreen()),
       ],
       debugShowCheckedModeBanner: false,
     );
