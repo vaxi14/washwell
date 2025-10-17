@@ -38,7 +38,7 @@ class MainNavigationController extends GetxController {
     _loadOrdersBadgeCount();
   }
 
-  // FIXED: Updated changeTab method for proper navigation
+  //Updated changeTab method for proper navigation
   void changeTab(int index) {
     if (index >= 0 && index < tabRoutes.length) {
       currentIndex.value = index;
