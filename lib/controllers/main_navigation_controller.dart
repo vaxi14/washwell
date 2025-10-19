@@ -47,7 +47,7 @@ class MainNavigationController extends GetxController {
       if (index == 1) { // Create Order tab index
         Get.offNamedUntil('/create-order', (route) => route.isFirst);
       } 
-      // For other tabs, use the existing navigation
+
       else {
         Get.offNamedUntil(tabRoutes[index], (route) => route.isFirst);
       }
