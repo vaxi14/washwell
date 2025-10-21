@@ -93,7 +93,6 @@ class MainNavigationController extends GetxController {
     _loadOrdersBadgeCount();
   }
 
-  // FIXED: Updated navigateToCreateOrder method
   void navigateToCreateOrder({String? serviceType}) {
     // Set the current index to Create Order tab
     currentIndex.value = 1;
