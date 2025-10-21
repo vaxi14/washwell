@@ -43,7 +43,6 @@ class MainNavigationController extends GetxController {
     if (index >= 0 && index < tabRoutes.length) {
       currentIndex.value = index;
       
-      // For Create Order tab, navigate to the create-order screen
       if (index == 1) { // Create Order tab index
         Get.offNamedUntil('/create-order', (route) => route.isFirst);
       } 
