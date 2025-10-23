@@ -93,7 +93,7 @@ class MainNavigationController extends GetxController {
   }
 
   void navigateToCreateOrder({String? serviceType}) {
-    // Set the current index to Create Order tab
+
     currentIndex.value = 1;
     
     // Navigate to create-order screen with optional service type
