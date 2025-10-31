@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-// Service Model
+
 class Service {
   final String name;
   final String icon;
@@ -20,18 +19,11 @@ class Service {
 class HomeController extends GetxController {
   
   var greeting = 'Hello!'.obs;
-
   var notificationCount = 0.obs;
-  
   var hasActiveOrders = false.obs;
-  
   var activeOrderStatus = 'No active orders'.obs;
-  
-
   var isLoading = false.obs;
-
   var services = <Service>[].obs;
-
   var totalOrders = 0.obs;
   var hoursSaved = 0.obs;
   var itemsCleaned = 0.obs;
@@ -42,8 +34,6 @@ class HomeController extends GetxController {
     initializeHomeData();
   }
 
-
-  ///Initialize all home screen data when app starts
   void initializeHomeData() {
     _setTimeBasedGreeting();
     _loadNotificationCount();
@@ -52,7 +42,6 @@ class HomeController extends GetxController {
     _initializeServices();
   }
 
-  /// Initialize services list
   void _initializeServices() {
     services.assignAll([
       Service(
@@ -94,9 +83,8 @@ class HomeController extends GetxController {
     }
   }
 
-
   void _loadNotificationCount() {
-    notificationCount.value = 3; //static for now
+    notificationCount.value = 3;
   }
 
   void _checkActiveOrders() {
@@ -116,8 +104,6 @@ class HomeController extends GetxController {
     itemsCleaned.value = 45;
   }
 
-
-  /// Navigate to track order screen
   void navigateToTrackOrder() {
     if (hasActiveOrders.value) {
       Get.toNamed('/track-order');
@@ -173,7 +159,6 @@ class HomeController extends GetxController {
     notificationCount.value = 0;
   }
 
-  /// Promotion bottom sheet
   void showPromotion() {
     final discount = totalOrders.value >= 1 ? '10%' : '25%';
     final message = totalOrders.value >= 1 
@@ -245,8 +230,6 @@ class HomeController extends GetxController {
     );
   }
 
-
-  /// Refresh all home screen data
   Future<void> refreshHomeData() async {
     isLoading.value = true;
     await Future.delayed(const Duration(seconds: 2));

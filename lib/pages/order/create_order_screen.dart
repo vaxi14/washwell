@@ -9,13 +9,11 @@ class CreateOrderScreen extends StatefulWidget {
 }
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
-  // Selected services list
+
   final List<SelectedService> _selectedServices = [];
 
-  // Controllers for input fields
   final Map<String, TextEditingController> _controllers = {};
 
-  // Prices for each service
   final Map<String, double> _servicePrices = {
     'wash': 50.0,
     'iron': 30.0,
@@ -26,7 +24,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers for all services
     _servicePrices.keys.forEach((service) {
       _controllers[service] = TextEditingController(text: '1');
     });
@@ -34,7 +31,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   void dispose() {
-    // Dispose all controllers
     _controllers.values.forEach((controller) => controller.dispose());
     super.dispose();
   }
@@ -64,22 +60,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
                   _buildHeader(),
                   
                   const SizedBox(height: 24),
                   
-                  // Services Selection
                   _buildServicesSelection(),
                   
                   const SizedBox(height: 24),
                   
-                  // Selected Services Chips
                   _buildSelectedServicesChips(),
                   
                   const SizedBox(height: 24),
                   
-                  // Service-specific Input Fields
                   _buildServiceInputFields(),
                   
                   const SizedBox(height: 32),
@@ -88,14 +80,12 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
           
-          // Bottom Price Summary & Button
           _buildBottomSummary(),
         ],
       ),
     );
   }
 
-  // Header Section
   Widget _buildHeader() {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +110,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Services Selection Grid
   Widget _buildServicesSelection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +161,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Individual Service Card
   Widget _buildServiceCard(String name, IconData icon, Color color, String price) {
     final isSelected = _selectedServices.any((service) => service.name.toLowerCase() == name.toLowerCase());
     
@@ -229,7 +217,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Selected Services Chips
   Widget _buildSelectedServicesChips() {
     if (_selectedServices.isEmpty) {
       return Container(
@@ -279,7 +266,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Service-specific Input Fields
   Widget _buildServiceInputFields() {
     if (_selectedServices.isEmpty) {
       return const SizedBox();
@@ -302,7 +288,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Individual Service Input Field
   Widget _buildServiceInputField(SelectedService service) {
     final serviceKey = service.name.toLowerCase();
     
@@ -342,7 +327,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Quantity Input Field
   Widget _buildQuantityInput(SelectedService service) {
     final serviceKey = service.name.toLowerCase();
     
@@ -360,7 +344,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
             onChanged: (value) {
               setState(() {
-                // Update quantity and recalculate price
                 final quantity = double.tryParse(value) ?? 0;
                 _updateServiceQuantity(service.name, quantity);
               });
@@ -370,7 +353,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         const SizedBox(width: 12),
         Column(
           children: [
-            // Increment Button
             GestureDetector(
               onTap: () => _adjustQuantity(service.name, 1),
               child: Container(
@@ -384,7 +366,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            // Decrement Button
             GestureDetector(
               onTap: () => _adjustQuantity(service.name, -1),
               child: Container(
@@ -403,7 +384,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Bottom Price Summary
   Widget _buildBottomSummary() {
     final totalAmount = _calculateTotal();
     
@@ -422,7 +402,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       ),
       child: Column(
         children: [
-          // Price Breakdown
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -442,7 +421,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           const SizedBox(height: 8),
           const Divider(height: 1),
           const SizedBox(height: 12),
-          // Total Amount
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -461,7 +439,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          // Continue Button
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -488,9 +465,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // ==================== HELPER METHODS ====================
-
-  // Toggle service selection
   void _toggleService(String serviceName) {
     setState(() {
       final serviceKey = serviceName.toLowerCase();
@@ -510,14 +484,12 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  // Remove service
   void _removeService(String serviceName) {
     setState(() {
       _selectedServices.removeWhere((s) => s.name.toLowerCase() == serviceName.toLowerCase());
     });
   }
 
-  // Update service quantity
   void _updateServiceQuantity(String serviceName, double quantity) {
     final index = _selectedServices.indexWhere(
       (s) => s.name.toLowerCase() == serviceName.toLowerCase()
@@ -532,7 +504,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Adjust quantity with buttons
   void _adjustQuantity(String serviceName, int change) {
     final serviceKey = serviceName.toLowerCase();
     final currentValue = double.tryParse(_controllers[serviceKey]!.text) ?? 1;
@@ -544,16 +515,14 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Calculate total amount
   double _calculateTotal() {
     return _selectedServices.fold(0.0, (sum, service) {
       return sum + (service.price * service.quantity);
     });
   }
 
-  // Proceed to next screen
   void _proceedToNext() {
-    final totalAmount = _calculateTotal() + 30; // Including service fee
+    final totalAmount = _calculateTotal() + 30; 
     
     Get.toNamed('/order-details', arguments: {
       'selectedServices': _selectedServices,
@@ -561,7 +530,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  // Get service color
   Color _getServiceColor(String serviceName) {
     switch (serviceName.toLowerCase()) {
       case 'wash': return Colors.blue;
@@ -572,7 +540,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Get service icon
   IconData _getServiceIcon(String serviceName) {
     switch (serviceName.toLowerCase()) {
       case 'wash': return Icons.local_laundry_service;
@@ -583,7 +550,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Get input label based on service
   String _getInputLabel(String serviceName) {
     switch (serviceName.toLowerCase()) {
       case 'wash': return 'Weight (kg)';
@@ -594,7 +560,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Get input hint based on service
   String _getInputHint(String serviceName) {
     switch (serviceName.toLowerCase()) {
       case 'wash': return 'Enter weight in kg';
@@ -605,7 +570,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  // Get input suffix based on service
   String _getInputSuffix(String serviceName) {
     switch (serviceName.toLowerCase()) {
       case 'wash': return 'kg';
@@ -615,7 +579,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 }
 
-// Selected Service Model
+
 class SelectedService {
   final String name;
   final double quantity;

@@ -7,10 +7,10 @@ import 'package:washwell/pages/service/clean_service_screen.dart';
 import 'package:washwell/pages/service/dry_service_screen.dart';
 import 'package:washwell/pages/service/iron_service_screen.dart';
 import 'package:washwell/pages/service/wash_service_screen.dart';
-import 'utils/supabase_client.dart';
-import 'controllers/auth_controller.dart';
-import 'pages/auth/signin_screen.dart';
-import 'pages/auth/signup_screen.dart';
+import 'package:washwell/utils/supabase_client.dart';
+import 'package:washwell/controllers/auth_controller.dart';
+import 'package:washwell/pages/auth/signin_screen.dart';
+import 'package:washwell/pages/auth/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,17 +30,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home:  HomeScreen(),
+      initialRoute: '/main',
       getPages: [
         GetPage(name: '/signin', page: () => SignInScreen()),
         GetPage(name: '/signup', page: () => SignUpScreen()),
-        GetPage(name: '/main', page: ()=> MainNavigationScreen()),
-        GetPage(name: '/home', page: () => HomeScreen()),
+        
+        GetPage(name: '/main', page: () => MainNavigationScreen()),
         GetPage(name: '/wash', page: () => WashServiceScreen()),
         GetPage(name: '/iron', page: () => IronServiceScreen()),
-        GetPage(name: '/dry', page: ()=> DryServiceScreen()),
-        GetPage(name: '/clean', page: ()=> CleanServiceScreen()),
-        GetPage(name: '/create-order', page: ()=> CreateOrderScreen()),
+        GetPage(name: '/dry', page: () => DryServiceScreen()),
+        GetPage(name: '/clean', page: () => CleanServiceScreen()),
+        GetPage(name: '/home', page: () => HomeScreen()),
+        GetPage(name: '/create-order', page: () => CreateOrderScreen()),
       ],
       debugShowCheckedModeBanner: false,
     );
@@ -58,24 +59,8 @@ class InitialScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           final authController = Get.find<AuthController>();
           if (authController.isLoggedIn.value) {
-            return Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Welcome to Washwell!',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => authController.signOut(),
-                      child: const Text('Sign Out'),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            // Navigate to main screen with bottom nav
+            return MainNavigationScreen();
           } else {
             return const SignInScreen();
           }

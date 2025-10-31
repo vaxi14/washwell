@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/main_navigation_controller.dart';
 import '../home/home_screen.dart';
+import '../order/create_order_screen.dart';
 
 class MainNavigationScreen extends StatelessWidget {
   MainNavigationScreen({super.key});
@@ -10,9 +11,13 @@ class MainNavigationScreen extends StatelessWidget {
 
   final List<Widget> _screens = [
     HomeScreen(),           
-    Container(),            
-    Container(),             
-    Container(),            
+    CreateOrderScreen(),    
+    Container(             
+      child: Center(child: Text('Orders Screen', style: TextStyle(fontSize: 24))),
+    ),
+    Container(             
+      child: Center(child: Text('Profile Screen', style: TextStyle(fontSize: 24))),
+    ),
   ];
 
   @override
@@ -35,6 +40,7 @@ class MainNavigationScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       selectedItemColor: Colors.blue,
       unselectedItemColor: Colors.grey[600],
+      elevation: 8,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),

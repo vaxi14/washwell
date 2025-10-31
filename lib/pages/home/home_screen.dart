@@ -63,7 +63,6 @@ class HomeScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Reactive greeting from controller
               Obx(() => Text(
                 controller.greeting.value,
                 style: TextStyle(
@@ -82,7 +81,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          // Reactive notification badge
           Obx(() => IconButton(
             onPressed: () {
               controller.onNotificationTap();
@@ -102,7 +100,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Track Order Section with dynamic content
   Widget _buildTrackOrderSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -141,7 +138,6 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Dynamic title based on order status
                     Text(
                       controller.trackOrderText,
                       style: const TextStyle(
@@ -151,7 +147,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    // Dynamic subtitle based on order status
                     Text(
                       controller.trackOrderSubtitle,
                       style: TextStyle(
@@ -159,7 +154,6 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white.withOpacity(0.9),
                       ),
                     ),
-                    // Show order status if active orders exist
                     if (controller.hasActiveOrders.value) ...[
                       const SizedBox(height: 8),
                       Text(
@@ -186,7 +180,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Services Section using controller data
   Widget _buildServicesSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -202,7 +195,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Reactive services grid from controller
           Obx(() => GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -223,9 +215,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Individual Service Card using Service model
   Widget _buildServiceCard(Service service) {
-    // Map service names to colors and icons
     final colorMap = {
       'Wash': Colors.blue,
       'Iron': Colors.green,
@@ -297,7 +287,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Quick Stats Section with reactive data
   Widget _buildQuickStatsSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -326,7 +315,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            // Reactive stats from controller
             Obx(() => Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -341,7 +329,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Individual Stat Item
   Widget _buildStatItem(String label, String value, IconData icon) {
     return Column(
       children: [

@@ -8,7 +8,6 @@ class AuthController extends GetxController {
   var isLoggedIn = false.obs;
   var currentUser = Rxn<User>();
 
-  // Validatibg functions (emial, password, name, phone)
   String? validateEmail(String? email) {
     if (email == null || email.isEmpty) return 'Email is required';
     if (!GetUtils.isEmail(email)) return 'Enter a valid email';
@@ -33,7 +32,6 @@ class AuthController extends GetxController {
     return null;
   }
 
-  //Checkong if email already exists
   Future<bool> isEmailUnique(String email) async {
     try {
       final response = await _supabase
@@ -43,12 +41,10 @@ class AuthController extends GetxController {
       
       return response.isEmpty;
     } catch (e) {
-      //it's unique, no record found
       return true;
     }
   }
 
-  //phone number already exists
   Future<bool> isPhoneUnique(String phone) async {
     try {
       final response = await _supabase
@@ -63,7 +59,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Enhanced Sign Up with validation
   Future<void> signUp({
     required String fullName,
     required String email,
@@ -71,7 +66,6 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     try {
-      // Pre-validation
       if (validateName(fullName) != null) {
         Get.snackbar('Error', 'Please enter a valid name');
         return;
@@ -88,8 +82,6 @@ class AuthController extends GetxController {
         Get.snackbar('Error', 'Password must be at least 6 characters');
         return;
       }
-
-      // Check uniqueness
       if (!await isEmailUnique(email)) {
         Get.snackbar('Error', 'Email already registered');
         return;
@@ -112,7 +104,6 @@ class AuthController extends GetxController {
       );
       
       if (response.user != null) {
-        //Create user profile in separate table
         await _createUserProfile(
           userId: response.user!.id,
           fullName: fullName,
@@ -130,14 +121,12 @@ class AuthController extends GetxController {
     }
   }
 
-  // Enhanced Sign In with validation
   Future<void> signIn({
     String? email,
     String? phoneNumber,
     required String password,
   }) async {
     try {
-      // Validation
       if ((email == null || email.isEmpty) && (phoneNumber == null || phoneNumber.isEmpty)) {
         Get.snackbar('Error', 'Please enter email or phone number');
         return;
@@ -170,7 +159,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Get email from phone number for login
   Future<String> _getEmailFromPhone(String phoneNumber) async {
     try {
       final response = await _supabase
@@ -188,7 +176,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Create user profile in separate table
   Future<void> _createUserProfile({
     required String userId,
     required String fullName,
@@ -212,7 +199,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Load user profile data
   Future<void> _loadUserProfile(String userId) async {
     try {
       final response = await _supabase
@@ -228,7 +214,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Sign Out
   Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
@@ -240,7 +225,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Check logged in status
   Future<void> checkAuthStatus() async {
     try {
       final User? user = _supabase.auth.currentUser;
@@ -255,7 +239,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Forgot Password
   Future<void> resetPassword(String email) async {
     try {
       if (validateEmail(email) != null) {
@@ -270,7 +253,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Get current user data
   Map<String, dynamic>? get userData => currentUser.value != null 
       ? {
           'id': currentUser.value!.id,
