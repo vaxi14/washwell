@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../controllers/main_navigation_controller.dart';
 import '../home/home_screen.dart';
 import '../order/create_order_screen.dart';
+import '../profile/profile_screen.dart';
 
 class MainNavigationScreen extends StatelessWidget {
   MainNavigationScreen({super.key});
@@ -15,9 +16,7 @@ class MainNavigationScreen extends StatelessWidget {
     Container(             
       child: Center(child: Text('Orders Screen', style: TextStyle(fontSize: 24))),
     ),
-    Container(             
-      child: Center(child: Text('Profile Screen', style: TextStyle(fontSize: 24))),
-    ),
+    ProfileScreen(), 
   ];
 
   @override
